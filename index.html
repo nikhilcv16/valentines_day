@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Aditi 💌</title>
+    <title>For Aditi</title>
     <style>
         * {
             margin: 0;
@@ -572,7 +572,7 @@
                     <div class="time">Afternoon</div>
                     <div class="title">Relax at Mine</div>
                     <div class="details">
-                        After our mystery activity, we'll head back to my place to unwind and recharge till 6:30 PM.
+                        After our mystery activity, we'll head back to my place to unwind and recharge till 6:30 PM. Oh, and a surprise meal will be made by yours truly.
                     </div>
                 </div>
 
@@ -623,28 +623,26 @@
 
         // ========== Runaway NO button ==========
         const btnNo = document.getElementById('btn-no');
-        let noClickable = true;
 
         function moveNoButton() {
             const btnYes = document.getElementById('btn-yes');
             const yesRect = btnYes.getBoundingClientRect();
             const yesCenterX = yesRect.left + yesRect.width / 2;
             const yesCenterY = yesRect.top + yesRect.height / 2;
-            const minDistance = 250; // minimum px away from YES button
+            const minDistance = 250;
 
             const margin = 30;
             const maxX = window.innerWidth - btnNo.offsetWidth - margin;
             const maxY = window.innerHeight - btnNo.offsetHeight - margin;
 
             let newX, newY, dist;
-            // Keep generating positions until far enough from YES
             do {
                 newX = margin + Math.random() * maxX;
                 newY = margin + Math.random() * maxY;
                 dist = Math.hypot(newX - yesCenterX, newY - yesCenterY);
             } while (dist < minDistance);
 
-            btnNo.style.transition = 'left 0.4s ease, top 0.4s ease'; // smooth glide
+            btnNo.style.transition = 'left 0.4s ease, top 0.4s ease';
             btnNo.style.position = 'fixed';
             btnNo.style.left = newX + 'px';
             btnNo.style.top = newY + 'px';
@@ -719,7 +717,7 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.05; // gravity
+                this.vy += 0.05;
                 this.alpha -= this.decay;
             }
 
@@ -767,11 +765,10 @@
             canvas.style.display = 'block';
             animateFireworks();
 
-            // Launch fireworks in bursts
             let count = 0;
             const interval = setInterval(() => {
                 createFirework();
-                if (Math.random() > 0.5) createFirework(); // sometimes double
+                if (Math.random() > 0.5) createFirework();
                 count++;
                 if (count > 60) clearInterval(interval);
             }, 300);
