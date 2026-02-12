@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Aditi 💌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a0011, #2d0a1f, #1a0011);
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-bg {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.15;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .heart-icon {
+            font-size: 80px;
+            animation: pulse 1.2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        h1 {
+            color: #ff6b9d;
+            font-size: 3rem;
+            margin: 20px 0 10px;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        }
+
+        h2 {
+            color: #ffb6c1;
+            font-size: 1.8rem;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff4b8a, #ff6bb5);
+            color: white;
+            border: none;
+            padding: 25px 70px;
+            font-size: 2rem;
+            font-family: 'Georgia', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 75, 138, 0.5), 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(255, 75, 138, 0.8), 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffb6c1;
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            position: absolute;
+            right: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Fireworks canvas */
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Success overlay */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .success-overlay.active {
+            display: flex;
+        }
+
+        .success-message {
+            text-align: center;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .success-message h1 {
+            font-size: 4rem;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            font-size: 1.5rem;
+            color: #ffb6c1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Itinerary page */
+        .itinerary-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0011, #2d0a1f, #1a0011);
+            z-index: 150;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .itinerary-page.active {
+            display: block;
+        }
+
+        .itinerary-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px 30px 80px;
+        }
+
+        .itinerary-header {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .itinerary-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .itinerary-header .date {
+            color: #ff6b9d;
+            font-size: 1.3rem;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        .itinerary-header .vague-note {
+            color: #ffb6c1;
+            font-size: 1rem;
+            margin-top: 15px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #ff4b8a, #ff6bb5, #ff4b8a);
+            opacity: 0.4;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.9s; }
+        .timeline-item:nth-child(4) { animation-delay: 1.2s; }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ff4b8a;
+            box-shadow: 0 0 12px rgba(255, 75, 138, 0.6);
+        }
+
+        .timeline-item .time {
+            color: #ff6b9d;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .timeline-item .title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item .details {
+            color: #ffb6c1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .timeline-item .details a {
+            color: #ff6bb5;
+            text-decoration: none;
+            border-bottom: 1px dotted #ff6bb5;
+            transition: color 0.2s;
+        }
+
+        .timeline-item .details a:hover {
+            color: #ffd700;
+        }
+
+        .timeline-item .playful-note {
+            color: #ffd700;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 6px;
+            opacity: 0.9;
+        }
+
+        .timeline-item .outfit-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 8px;
+        }
+
+        .timeline-item .outfit-list li {
+            color: #ffb6c1;
+            padding: 4px 0;
+            font-size: 0.95rem;
+        }
+
+        .timeline-item .outfit-list li::before {
+            content: '~ ';
+            color: #ff4b8a;
+        }
+
+        .weather-note {
+            color: #ffd700;
+            font-style: italic;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        .itinerary-footer {
+            text-align: center;
+            margin-top: 50px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 1.5s;
+        }
+
+        .itinerary-footer p {
+            color: #ffb6c1;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* Popup for No */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup {
+            background: linear-gradient(135deg, #2d0a1f, #1a0011);
+            border: 2px solid #ff6b9d;
+            border-radius: 20px;
+            padding: 40px 50px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.3);
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup p {
+            color: #ffb6c1;
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .popup button {
+            background: linear-gradient(135deg, #ff4b8a, #ff6bb5);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .popup button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating hearts background -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <!-- Main content -->
+    <div class="content" id="main-content">
+        <div class="heart-icon">💕</div>
+        <h1>Aditi, will you be my Valentine?</h1>
+        <h2>I promise to make it special...</h2>
+        <div class="buttons">
+            <button class="btn-yes" id="btn-yes">YES!</button>
+            <button class="btn-no" id="btn-no">no</button>
+        </div>
+    </div>
+
+    <!-- Fireworks canvas -->
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Success overlay (fireworks moment) -->
+    <div class="success-overlay" id="success-overlay">
+        <div class="success-message">
+            <h1>I knew you'd say yes! 💕</h1>
+            <p>Happy Valentine's Day, Aditi!</p>
+        </div>
+    </div>
+
+    <!-- Itinerary page -->
+    <div class="itinerary-page" id="itinerary-page">
+        <div class="floating-hearts" id="floating-hearts-2"></div>
+        <div class="itinerary-inner">
+            <div class="itinerary-header">
+                <h1>February 14th</h1>
+                <div class="date">Valentine's Day 2026</div>
+                <p class="vague-note">Fair warning... the details will be intentionally vague. Just trust me.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time">12:30 PM</div>
+                    <div class="title">Meet Me</div>
+                    <div class="details">
+                        28th Street Station (1 / 2 train)<br>
+                        <a href="https://maps.google.com/?q=28th+Street+Station+1+2+train+New+York" target="_blank">Open in Google Maps</a>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time">What to wear</div>
+                    <div class="title">Workout Clothes</div>
+                    <div class="details">
+                        Yes, you read that right. Workout clothes.
+                    </div>
+                    <div class="playful-note">Trust me, it's not what you think it is... (and no, I'm not making you work out)</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time">Afternoon</div>
+                    <div class="title">Relax at Mine</div>
+                    <div class="details">
+                        After our mystery activity, we'll head back to my place to unwind and recharge till 6:30 PM.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time">6:30 PM onwards</div>
+                    <div class="title">The Evening (Details TBD...)</div>
+                    <div class="details">
+                        Plans are vague again. But bring a change of clothes:
+                        <ul class="outfit-list">
+                            <li>A nice dress</li>
+                            <li>Heels</li>
+                            <li>A coat</li>
+                        </ul>
+                        <div class="weather-note">Check the weather before you pick your coat &mdash; dress warm enough for the evening!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="itinerary-footer">
+                <p>That's all you get for now, angel. See you there. 💕</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- No popup -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <p>Try again angel 💗</p>
+            <button id="popup-close">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== Floating hearts background ==========
+        const heartsContainer = document.getElementById('floating-hearts');
+        const heartEmojis = ['💕', '💗', '💖', '💘', '❤️', '💝'];
+
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'heart-bg';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (12 + Math.random() * 20) + 'px';
+            heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+            heart.style.animationDelay = (Math.random() * 10) + 's';
+            heartsContainer.appendChild(heart);
+        }
+
+        // ========== Runaway NO button ==========
+        const btnNo = document.getElementById('btn-no');
+        let noClickable = true;
+
+        function moveNoButton() {
+            const btnYes = document.getElementById('btn-yes');
+            const yesRect = btnYes.getBoundingClientRect();
+            const yesCenterX = yesRect.left + yesRect.width / 2;
+            const yesCenterY = yesRect.top + yesRect.height / 2;
+            const minDistance = 250; // minimum px away from YES button
+
+            const margin = 30;
+            const maxX = window.innerWidth - btnNo.offsetWidth - margin;
+            const maxY = window.innerHeight - btnNo.offsetHeight - margin;
+
+            let newX, newY, dist;
+            // Keep generating positions until far enough from YES
+            do {
+                newX = margin + Math.random() * maxX;
+                newY = margin + Math.random() * maxY;
+                dist = Math.hypot(newX - yesCenterX, newY - yesCenterY);
+            } while (dist < minDistance);
+
+            btnNo.style.transition = 'left 0.4s ease, top 0.4s ease'; // smooth glide
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = newX + 'px';
+            btnNo.style.top = newY + 'px';
+            btnNo.style.right = 'auto';
+            btnNo.style.transform = 'none';
+        }
+
+        btnNo.addEventListener('mouseenter', function () {
+            moveNoButton();
+        });
+
+        // Also flee when the mouse gets close (within 80px)
+        document.addEventListener('mousemove', function (e) {
+            const rect = btnNo.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+            if (dist < 80) {
+                moveNoButton();
+            }
+        });
+
+        // Also handle touch for mobile
+        btnNo.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // If somehow they manage to click it
+        btnNo.addEventListener('click', function () {
+            document.getElementById('popup-overlay').classList.add('active');
+        });
+
+        // Close popup
+        document.getElementById('popup-close').addEventListener('click', function () {
+            document.getElementById('popup-overlay').classList.remove('active');
+        });
+
+        document.getElementById('popup-overlay').addEventListener('click', function (e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+
+        // ========== YES button — Fireworks! ==========
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let fireworksRunning = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.005;
+                this.size = Math.random() * 3 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.05; // gravity
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const fireworkColors = [
+            '#ff4b8a', '#ff6bb5', '#ffb6c1', '#ff69b4',
+            '#ff1493', '#ffd700', '#ff6347', '#ff8c00',
+            '#ff00ff', '#ffffff', '#ff99cc', '#ff3366'
+        ];
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.6;
+            const color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            for (let i = 0; i < 80; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animateFireworks() {
+            if (!fireworksRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles = particles.filter(p => p.alpha > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateFireworks);
+        }
+
+        function startFireworks() {
+            fireworksRunning = true;
+            canvas.style.display = 'block';
+            animateFireworks();
+
+            // Launch fireworks in bursts
+            let count = 0;
+            const interval = setInterval(() => {
+                createFirework();
+                if (Math.random() > 0.5) createFirework(); // sometimes double
+                count++;
+                if (count > 60) clearInterval(interval);
+            }, 300);
+        }
+
+        document.getElementById('btn-yes').addEventListener('click', function () {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('success-overlay').classList.add('active');
+            startFireworks();
+
+            // After fireworks moment, transition to itinerary
+            setTimeout(() => {
+                document.getElementById('success-overlay').classList.remove('active');
+                fireworksRunning = false;
+                canvas.style.display = 'none';
+                const itinerary = document.getElementById('itinerary-page');
+                itinerary.classList.add('active');
+
+                // Add floating hearts to itinerary page too
+                const hearts2 = document.getElementById('floating-hearts-2');
+                for (let i = 0; i < 15; i++) {
+                    const heart = document.createElement('span');
+                    heart.className = 'heart-bg';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.fontSize = (12 + Math.random() * 20) + 'px';
+                    heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+                    heart.style.animationDelay = (Math.random() * 5) + 's';
+                    hearts2.appendChild(heart);
+                }
+            }, 4000);
+        });
+    </script>
+</body>
+</html>
